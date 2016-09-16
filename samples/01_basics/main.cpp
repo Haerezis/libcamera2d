@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "scrollingcamera/scrollingcamera.hpp"
+#include "camera2d/camera2d.hpp"
 
 int main(int argc, char**argv)
 {
