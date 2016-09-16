@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 
 # project name
-set(PROJECT_NAME "camera2d")
+set(PROJECT_NAME "libcamera2d")
 project (${PROJECT_NAME})
 
 # setup version numbers

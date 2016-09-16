@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "camera2d/camera2d.hpp"
+#include "libcamera2d/libcamera2d.hpp"
 
 int main(int argc, char**argv)
 {
