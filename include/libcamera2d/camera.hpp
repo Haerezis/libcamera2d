@@ -11,8 +11,15 @@ class Camera
  public:
   /**
    * Basic constructor.
+   * \param[in] width The initial width of the camera.
+   * \param[in] height The initial height of the camera.
+   * \param[in] worldWidth The width of the world in which the camera is moving. 0 means no maximum width.
+   * \param[in] worldHeight The width of the height in which the camera is moving. 0 means no maximum height.
    */
-  Camera();
+  Camera(unsigned int width,
+     unsigned int height,
+     unsigned int worldWidth,
+     unsigned int worldHeight);
 
   /**
    * Destructor.
@@ -32,22 +39,40 @@ class Camera
   unsigned int y() const;
 
   /**
-   * Get the height (in pixels) of the image displayed by the camera
-   * \return the height (in pixels) of the image displayed by the camera
+   * Get the height (in pixels) of the image displayed by the camera.
+   * \return the height (in pixels) of the image displayed by the camera.
    */
   unsigned int height() const;
 
   /**
-   * Get the width (in pixels) of the image displayed by the camera
-   * \return the width (in pixels) of the image displayed by the camera
+   * Get the width (in pixels) of the image displayed by the camera.
+   * \return the width (in pixels) of the image displayed by the camera.
    */
   unsigned int width() const;
 
   /**
-   * Get the scale value of the camera.
-   * \return The scale value of the camera.
+   * Get the height (in pixels) of the world in which the camera is moving.
+   * \return The height (in pixels) of the world in which the camera is moving.
    */
-  float scale() const;
+  unsigned int worldHeight() const;
+
+  /**
+   * Set the height (in pixels) of the world in which the camera is moving.
+   * \param[in] The height (in pixels) of the world in which the camera is moving.
+   */
+  void worldHeight(unsigned int height);
+
+  /**
+   * Get the width (in pixels) of the world in which the camera is moving.
+   * \return The width (in pixels) of the world in which the camera is moving.
+   */
+  unsigned int worldWidth() const;
+
+  /**
+   * Set the width (in pixels) of the world in which the camera is moving.
+   * \param[in] The width (in pixels) of the world in which the camera is moving.
+   */
+  void worldWidth(unsigned int width);
 
  protected:
   /**
@@ -71,9 +96,16 @@ class Camera
   unsigned int _width;
 
   /**
-   * The scale of the image displayed by the camera.
+   * The height (in pixels) of the world in which the camera is moving.
+   * If 0, the world doesn't have any Y axis bound.
    */
-  float _scale;
+  unsigned int _worldHeight;
+
+  /**
+   * The width (in pixels) of the world in which the camera is moving.
+   * If 0, the world doesn't have any X axis bound.
+   */
+  unsigned int _worldWidth;
 };
 }
 

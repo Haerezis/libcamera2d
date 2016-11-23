@@ -5,14 +5,14 @@ MACRO(SUBDIRLIST result curdir)
   FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
   SET(dirlist "")
   FOREACH(child ${children})
-    IF(IS_DIRECTORY ${curdir}/${child})
-      LIST(APPEND dirlist ${child})
-    ENDIF()
+  IF(IS_DIRECTORY ${curdir}/${child})
+    LIST(APPEND dirlist ${child})
+  ENDIF()
   ENDFOREACH()
   SET(${result} ${dirlist})
 ENDMACRO()
 
-find_library(SDL2 REQUIRED)
+find_package(SDL2 REQUIRED)
 
 #For every subdirectory, we add an executable named after the directory name.
 #This executable is linked to libscrollingcamera and SDL.
@@ -27,6 +27,7 @@ FOREACH(subdir ${SUBDIRS})
 
   add_executable(${SampleName} ${SRC_FILES} ${HEADER_FILES})
   target_include_directories(${SampleName} PUBLIC ${INCLUDE_ROOT})
+  target_include_directories(${SampleName} PUBLIC ${SDL2_INCLUDE_DIR})
   target_link_libraries(${SampleName} ${PROJECT_NAME})
   target_link_libraries(${SampleName} ${SDL2_LIBRARY})
 ENDFOREACH()
