@@ -5,7 +5,7 @@
 
 #include <SDL.h>
 
-#include "libcamera2d/camera_staticOffsetFromTarget.hpp"
+#include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
 
 class SdlException : public std::exception
 {

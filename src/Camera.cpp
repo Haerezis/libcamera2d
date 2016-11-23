@@ -1,4 +1,4 @@
-#include "libcamera2d/camera.hpp"
+#include "libcamera2d/Camera.hpp"
 
 namespace libcamera2d
 {

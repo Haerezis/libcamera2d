@@ -1,4 +1,4 @@
-#include "libcamera2d/camera_staticOffsetFromTarget.hpp"
+#include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
 
 namespace libcamera2d
 {
