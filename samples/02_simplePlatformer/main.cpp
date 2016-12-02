@@ -5,6 +5,8 @@
 
 #include <SDL.h>
 
+#include <windows.h>
+
 #include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
 #include "tilemap_data.hpp"
 
@@ -94,7 +96,7 @@ DemoSDL::DemoSDL(
   _tileSize(tileSize),
   _playerPositionX(0),
   _playerPositionY(0),
-  _playerSize(tileSize / 4)
+  _playerSize(tileSize)
 {
   if(SDL_Init( flags ) != 0)
     throw SdlException();
@@ -110,7 +112,7 @@ DemoSDL::DemoSDL(
     throw SdlException();
 
   _tileMapWidth = sizeof(tilemap_data) / sizeof(tilemap_data[0]);
-  _tileMapHeight = sizeof(tilemap_data[0]) / sizeof(tilemap_data[0]);
+  _tileMapHeight = sizeof(tilemap_data[0]) / sizeof(tilemap_data[0][0]);
 
   _tileMap = new unsigned char*[_tileMapWidth];
   for(unsigned int x = 0; x < _tileMapWidth; x++)
@@ -266,7 +268,7 @@ int main( int argc, char ** argv)
     const unsigned int frameDuration = 1000 / fps;
     unsigned int timeBefore = 0;
 
-    DemoSDL sdl(640, 480, 32, SDL_INIT_VIDEO | SDL_INIT_TIMER );
+    DemoSDL sdl(480, 360, 32, SDL_INIT_VIDEO | SDL_INIT_TIMER );
 
     while(true)
     {
@@ -277,7 +279,7 @@ int main( int argc, char ** argv)
       sdl.updateCamera();
       sdl.draw();
 
-      SDL_Delay(frameDuration - (SDL_GetTicks() - timeBefore));
+      SDL_Delay(frameDuration - std::min(frameDuration, (SDL_GetTicks() - timeBefore)));
     }
 
     return 0;

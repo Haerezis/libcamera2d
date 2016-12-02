@@ -124,10 +124,11 @@ IF(NOT APPLE)
 	FIND_PACKAGE(Threads)
 ENDIF(NOT APPLE)
 
-# MinGW needs an additional link flag, -mwindows
-# It's total link flags should look like -lmingw32 -lSDL2main -lSDL2 -mwindows
+# MinGW needs an additional link flag
+# It's total link flags should look like -lmingw32 -lSDL2main -lSDL2
 IF(MINGW)
-	SET(MINGW32_LIBRARY mingw32 "-mwindows" CACHE STRING "mwindows for MinGW")
+	#SET(MINGW32_LIBRARY mingw32 "-mwindows" CACHE STRING "mwindows for MinGW")
+    SET(MINGW32_LIBRARY mingw32 CACHE STRING "MinGW")
 ENDIF(MINGW)
 
 IF(SDL2_LIBRARY_TEMP)

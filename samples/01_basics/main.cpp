@@ -281,7 +281,7 @@ int main( int argc, char ** argv)
       sdl.updateCamera();
       sdl.draw();
 
-      SDL_Delay(frameDuration - (SDL_GetTicks() - timeBefore));
+      SDL_Delay(frameDuration - std::min(frameDuration, (SDL_GetTicks() - timeBefore)));
     }
 
     return 0;
