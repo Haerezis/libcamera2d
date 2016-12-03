@@ -3,38 +3,17 @@
 namespace libcamera2d
 {
 
-Camera::Camera(unsigned int width,
-     unsigned int height,
-     unsigned int worldWidth,
-     unsigned int worldHeight) :
-       _x(0), _y(0),
-       _width(width),
-       _height(height),
-       _worldWidth(worldWidth),
-       _worldHeight(worldHeight)
+Camera::Camera(
+    unsigned int width,
+    unsigned int height,
+    unsigned int worldWidth,
+    unsigned int worldHeight) :
+      Object2D(width, height),
+      _worldWidth(worldWidth),
+      _worldHeight(worldHeight)
 {}
 
 Camera::~Camera() {}
-
-unsigned int Camera::x() const
-{
-  return _x;
-}
-
-unsigned int Camera::y() const
-{
-  return _y;
-}
-
-unsigned int Camera::height() const
-{
-  return _height;
-}
-
-unsigned int Camera::width() const
-{
-  return _width;
-}
 
 unsigned int Camera::worldHeight() const
 {

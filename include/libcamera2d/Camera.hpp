@@ -1,12 +1,14 @@
 #ifndef _LIBCAMERA2D_CAMERA_HPP
 #define _LIBCAMERA2D_CAMERA_HPP
 
+#include "libcamera2d/Object2D.hpp"
+
 namespace libcamera2d
 {
 /**
  * The base class for all Camera class.
  */
-class Camera
+class Camera : public Object2D
 {
  public:
   /**
@@ -25,30 +27,6 @@ class Camera
    * Destructor.
    */
   virtual ~Camera();
-
-  /**
-   * Get the X axis origin of the camera.
-   * \return the X axis origin of the camera.
-   */
-  unsigned int x() const;
-
-  /**
-   * Get the Y axis origin of the camera.
-   * \return the Y axis origin of the camera.
-   */
-  unsigned int y() const;
-
-  /**
-   * Get the height (in pixels) of the image displayed by the camera.
-   * \return the height (in pixels) of the image displayed by the camera.
-   */
-  unsigned int height() const;
-
-  /**
-   * Get the width (in pixels) of the image displayed by the camera.
-   * \return the width (in pixels) of the image displayed by the camera.
-   */
-  unsigned int width() const;
 
   /**
    * Get the height (in pixels) of the world in which the camera is moving.
@@ -75,26 +53,6 @@ class Camera
   void worldWidth(unsigned int width);
 
  protected:
-  /**
-   * The X-axis origin of the camera.
-   */
-  unsigned int _x;
-
-  /**
-   * The Y-axis origin of the camera.
-   */
-  unsigned int _y;
-
-  /**
-   * The height (in pixels) of the image displayed by the camera.
-   */
-  unsigned int _height;
-
-  /**
-   * The width (in pixels) of the image displayed by the camera.
-   */
-  unsigned int _width;
-
   /**
    * The height (in pixels) of the world in which the camera is moving.
    * If 0, the world doesn't have any Y axis bound.
