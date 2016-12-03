@@ -1,7 +1,7 @@
 #ifndef _LIBCAMERA2D_CAMERA__STATIC_OFFSET_FROM_PLAYER_HPP
 #define _LIBCAMERA2D_CAMERA__STATIC_OFFSET_FROM_PLAYER_HPP
 
-#include "libcamera2d/camera.hpp"
+#include "libcamera2d/Camera.hpp"
 
 namespace libcamera2d
 {
@@ -16,6 +16,9 @@ class Camera_staticOffsetFromTarget : public Camera
         unsigned int worldWidth,
         unsigned int worldHeight);
 
+    /**
+     * Destructor.
+     */
     virtual ~Camera_staticOffsetFromTarget();
 
     /**
