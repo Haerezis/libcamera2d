@@ -7,6 +7,7 @@
 
 #include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
 #include "tilemap_data.hpp"
+#include "Player.hpp"
 
 class SdlException : public std::exception
 {
