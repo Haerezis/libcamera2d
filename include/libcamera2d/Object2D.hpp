@@ -26,7 +26,7 @@ class Object2D
    * \return the X axis origin of the object.
    */
   unsigned int x() const;
-  
+
   /**
    * Set the X axis origin of the object.
    */
@@ -59,7 +59,7 @@ class Object2D
    * \return the width (in pixels) of the image displayed by the object.
    */
   unsigned int width() const;
-  
+
   /**
    * Set the width (in pixels) of the object.
    */

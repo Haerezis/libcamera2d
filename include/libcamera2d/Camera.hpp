@@ -15,13 +15,13 @@ class Camera : public Object2D
    * Basic constructor.
    * \param[in] width The initial width of the camera.
    * \param[in] height The initial height of the camera.
-   * \param[in] worldWidth The width of the world in which the camera is moving. 0 means no maximum width.
-   * \param[in] worldHeight The width of the height in which the camera is moving. 0 means no maximum height.
+   * \param[in] worldWidth The width of the world in which the camera is moving. 0 means no maximum
+   * width.
+   * \param[in] worldHeight The width of the height in which the camera is moving. 0 means no
+   * maximum height.
    */
-  Camera(unsigned int width,
-     unsigned int height,
-     unsigned int worldWidth,
-     unsigned int worldHeight);
+  Camera(unsigned int width, unsigned int height, unsigned int worldWidth,
+         unsigned int worldHeight);
 
   /**
    * Destructor.

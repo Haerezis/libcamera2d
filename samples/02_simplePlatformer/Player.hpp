@@ -6,11 +6,8 @@
 class Player : public libcamera2d::Object2D
 {
  public:
-  Player(
-      unsigned int width,
-      unsigned int height,
-      unsigned int worldWidth = 0,
-      unsigned int worldHeight = 0);
+  Player(unsigned int width, unsigned int height, unsigned int worldWidth = 0,
+         unsigned int worldHeight = 0);
 
   ~Player();
 
