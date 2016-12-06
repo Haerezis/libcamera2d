@@ -26,6 +26,9 @@ class Player : public libcamera2d::Object2D
  protected:
   unsigned int _worldWidth;
   unsigned int _worldHeight;
+
+  static const unsigned int _horizontalMoveIncrement = 4;
+  static const unsigned int _verticalMoveIncrement = 4;
 };
 
 #endif
