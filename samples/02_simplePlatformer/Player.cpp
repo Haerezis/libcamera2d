@@ -4,7 +4,9 @@ Player::Player(unsigned int width, unsigned int height, unsigned int worldWidth,
                unsigned int worldHeight) :
     Object2D(width, height),
     _worldWidth(worldWidth),
-    _worldHeight(worldHeight)
+    _worldHeight(worldHeight),
+    _horizontalVelocity(0),
+    _verticalVelocity(0)
 {
 }
 
@@ -20,6 +22,7 @@ void Player::worldHeight(unsigned int value) { _worldHeight = value; }
 
 void Player::moveHorizontal(float value)
 {
+  /*
   if (value < 0.0f) //LEFT
   {
     if (_x <= Player::_horizontalMoveIncrement)
@@ -40,10 +43,12 @@ void Player::moveHorizontal(float value)
       _x = _worldWidth - _width;
     }
   }
+  */
 }
 
 void Player::moveVertical(float value)
 {
+  /*
   if (value < 0.0f) //UP
   {
     if (_y <= Player::_verticalMoveIncrement)
@@ -63,4 +68,5 @@ void Player::moveVertical(float value)
       _y = _worldHeight - _height;
     }
   }
+  */
 }

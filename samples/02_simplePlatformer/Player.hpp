@@ -1,5 +1,5 @@
-#ifndef __LIBCAMERA2D_SIMPLE_PLATEFORMER_PLAYER__HPP
-#define __LIBCAMERA2D_SIMPLE_PLATEFORMER_PLAYER__HPP
+#ifndef __LIBCAMERA2D_01_BASICS_PLAYER__HPP
+#define __LIBCAMERA2D_01_BASICS_PLAYER__HPP
 
 #include "libcamera2d/Object2D.hpp"
 
@@ -25,10 +25,19 @@ class Player : public libcamera2d::Object2D
 
  protected:
   unsigned int _worldWidth;
+
   unsigned int _worldHeight;
 
-  static const unsigned int _horizontalMoveIncrement = 4;
-  static const unsigned int _verticalMoveIncrement = 4;
+  int _horizontalVelocity;
+
+  int _verticalVelocity;
+
+  static const int _maxHorizontalVelocity = 4;
+
+  static const int _maxVerticalVelocity = 4;
+
+  static const unsigned int _horizontalAcceleration = 4;
+  static const unsigned int _verticalAcceleration = 4;
 };
 
 #endif
