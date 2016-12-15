@@ -8,30 +8,8 @@
 #include "Player.hpp"
 #include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
 #include "tilemap_data.hpp"
-
-class SdlException : public std::exception
-{
- public:
-  SdlException();
-  SdlException(const std::string& m);
-  virtual ~SdlException() throw();
-  virtual const char* what() const throw();
-
- protected:
-  std::string _msg;
-};
-
-SdlException::SdlException() : exception(), _msg(SDL_GetError()) {}
-
-SdlException::SdlException(const std::string& m) : exception(), _msg(m) {}
-
-SdlException::~SdlException() throw() {}
-
-const char* SdlException::what() const throw() { return _msg.c_str(); }
-
-//////////////////////////
-//////////////////////////
-//////////////////////////
+#include "SdlException.hpp"
+#include "Tilemap.hpp"
 
 class DemoSDL
 {
@@ -52,9 +30,7 @@ class DemoSDL
   unsigned int _windowWidth;
   unsigned int _windowHeight;
 
-  unsigned char** _tileMap;
-  unsigned int _tileMapWidth;
-  unsigned int _tileMapHeight;
+  Tilemap _tileMap;
   unsigned int _tileSize;
 
   Player _player;
@@ -70,6 +46,7 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
     : _windowWidth(windowWidth),
       _windowHeight(windowHeight),
       _tileSize(tileSize),
+      _tileMap(sizeof(tilemap_data) / sizeof(tilemap_data[0]), sizeof(tilemap_data[0]) / sizeof(tilemap_data[0][0])),
       _player(tileSize, tileSize)
 {
   if (SDL_Init(flags) != 0) throw SdlException();
@@ -79,25 +56,20 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
 
   if (res != 0) throw SdlException();
 
-  _tileMapWidth = sizeof(tilemap_data) / sizeof(tilemap_data[0]);
-  _tileMapHeight = sizeof(tilemap_data[0]) / sizeof(tilemap_data[0][0]);
-
-  _tileMap = new unsigned char*[_tileMapWidth];
-  for (unsigned int x = 0; x < _tileMapWidth; x++)
+  for (unsigned int x = 0; x < _tileMap.width(); x++)
   {
-    _tileMap[x] = new unsigned char[_tileMapHeight];
-    for (unsigned int y = 0; y < _tileMapHeight; y++)
+    for (unsigned int y = 0; y < _tileMap.height(); y++)
     {
-      _tileMap[x][y] = tilemap_data[x][y];
+      _tileMap(x, y) = tilemap_data[x][y];
     }
   }
 
   _camera.reset(new libcamera2d::Camera_staticOffsetFromTarget(
       (_windowWidth - _player.width()) / 2, (_windowHeight - _player.height()) / 2, _windowWidth,
-      _windowHeight, _tileMapWidth * _tileSize, _tileMapHeight * _tileSize));
+      _windowHeight, _tileMap.width() * _tileSize, _tileMap.height() * _tileSize));
 
-  _player.worldWidth(_tileMapWidth * _tileSize);
-  _player.worldHeight(_tileMapHeight * _tileSize);
+  _player.worldWidth(_tileMap.width() * _tileSize);
+  _player.worldHeight(_tileMap.height() * _tileSize);
 
   updateCamera();
 }
@@ -118,14 +90,14 @@ void DemoSDL::draw()
   SDL_Rect tile = {0, 0, static_cast<int>(_tileSize), static_cast<int>(_tileSize)};
   SDL_Rect player = {0, 0, static_cast<int>(_player.width()), static_cast<int>(_player.height())};
 
-  for (unsigned int x = 0; x < _tileMapWidth; x++)
+  for (unsigned int x = 0; x < _tileMap.width(); x++)
   {
-    for (unsigned int y = 0; y < _tileMapHeight; y++)
+    for (unsigned int y = 0; y < _tileMap.height(); y++)
     {
       tile.x = x * _tileSize - _camera->x();
       tile.y = y * _tileSize - _camera->y();
 
-      if (_tileMap[x][y] == 0)
+      if (_tileMap(x, y) == 0)
       {
         SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
       }

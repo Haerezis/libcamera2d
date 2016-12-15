@@ -18,3 +18,23 @@ unsigned char& Tilemap::operator()(unsigned int x, unsigned int y)
 
   return _data[y * _width + x];
 }
+
+
+unsigned int Tilemap::width() const
+{
+  return _width;
+}
+
+unsigned int Tilemap::height() const
+{
+  return _height;
+}
+
+void Tilemap::reset(unsigned int width, unsigned int height)
+{
+  _data.clear();
+
+  _width = width;
+  _height = height;
+  _data.resize(_width * _height, 0);
+}

@@ -12,6 +12,12 @@ class Tilemap
 
     unsigned char& operator()(unsigned int x, unsigned int y);
 
+    unsigned int width() const;
+    
+    unsigned int height() const;
+
+    void reset(unsigned int width, unsigned int height);
+
   protected:
 
     std::vector<unsigned char> _data;
