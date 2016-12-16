@@ -6,7 +6,7 @@
 class Tilemap
 {
   public:
-    Tilemap(unsigned int width = 0, unsigned int height = 0);
+    Tilemap(unsigned int width = 0, unsigned int height = 0, unsigned int tilesize = 0);
 
     virtual ~Tilemap();
 
@@ -15,6 +15,10 @@ class Tilemap
     unsigned int width() const;
     
     unsigned int height() const;
+
+    unsigned int tilesize() const;
+
+    void tilesize(unsigned int value);
 
     void reset(unsigned int width, unsigned int height);
 
@@ -25,6 +29,8 @@ class Tilemap
     unsigned int _width;
 
     unsigned int _height;
+
+    unsigned int _tilesize;
 };
 
 #endif

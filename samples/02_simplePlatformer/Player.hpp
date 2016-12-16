@@ -1,32 +1,30 @@
 #ifndef __LIBCAMERA2D_01_BASICS_PLAYER__HPP
 #define __LIBCAMERA2D_01_BASICS_PLAYER__HPP
 
+#include <memory>
+
 #include "libcamera2d/Object2D.hpp"
+#include "Tilemap.hpp"
 
 class Player : public libcamera2d::Object2D
 {
  public:
-  Player(unsigned int width, unsigned int height, unsigned int worldWidth = 0,
-         unsigned int worldHeight = 0);
+  Player(unsigned int width,
+      unsigned int height,
+      const Tilemap& tilemap);
 
   ~Player();
 
-  unsigned int worldWidth() const;
-
-  void worldWidth(unsigned int value);
-
-  unsigned int worldHeight() const;
-
-  void worldHeight(unsigned int value);
+  void tilemap(const Tilemap& tilemap);
 
   void moveHorizontal(float value);
 
   void moveVertical(float value);
 
  protected:
-  unsigned int _worldWidth;
-
-  unsigned int _worldHeight;
+  //This is a pointer because it should be mutable, so it can't be a reference,
+  //but we don't want to copy it when changing it (a tilemap can have a big memory footprint)
+  const Tilemap * _tilemap;
 
   int _horizontalVelocity;
 

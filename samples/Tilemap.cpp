@@ -2,9 +2,10 @@
 
 #include <stdexcept>
 
-Tilemap::Tilemap(unsigned int width, unsigned int height) :
+Tilemap::Tilemap(unsigned int width, unsigned int height, unsigned int tilesize) :
   _width(width),
   _height(height),
+  _tilesize(tilesize),
   _data(width * height, 0)
 {
 }
@@ -28,6 +29,16 @@ unsigned int Tilemap::width() const
 unsigned int Tilemap::height() const
 {
   return _height;
+}
+
+unsigned int Tilemap::tilesize() const
+{
+  return _tilesize;
+}
+
+void Tilemap::tilesize(unsigned int value)
+{
+  _tilesize = value;
 }
 
 void Tilemap::reset(unsigned int width, unsigned int height)

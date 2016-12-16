@@ -1,10 +1,8 @@
 #include "Player.hpp"
 
-Player::Player(unsigned int width, unsigned int height, unsigned int worldWidth,
-               unsigned int worldHeight) :
+Player::Player(unsigned int width, unsigned int height, const Tilemap& tilemap) :
     Object2D(width, height),
-    _worldWidth(worldWidth),
-    _worldHeight(worldHeight),
+    _tilemap(&tilemap),
     _horizontalVelocity(0),
     _verticalVelocity(0)
 {
@@ -12,13 +10,10 @@ Player::Player(unsigned int width, unsigned int height, unsigned int worldWidth,
 
 Player::~Player() {}
 
-unsigned int Player::worldWidth() const { return _worldWidth; }
-
-void Player::worldWidth(unsigned int value) { _worldWidth = value; }
-
-unsigned int Player::worldHeight() const { return _worldHeight; }
-
-void Player::worldHeight(unsigned int value) { _worldHeight = value; }
+void Player::tilemap(const Tilemap& tilemap)
+{
+  _tilemap = &tilemap;
+}
 
 void Player::moveHorizontal(float value)
 {

@@ -31,7 +31,6 @@ class DemoSDL
   unsigned int _windowHeight;
 
   Tilemap _tileMap;
-  unsigned int _tileSize;
 
   Player _player;
 
@@ -45,9 +44,11 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
                  Uint32 flags)
     : _windowWidth(windowWidth),
       _windowHeight(windowHeight),
-      _tileSize(tileSize),
-      _tileMap(sizeof(tilemap_data) / sizeof(tilemap_data[0]), sizeof(tilemap_data[0]) / sizeof(tilemap_data[0][0])),
-      _player(tileSize, tileSize)
+      _tileMap(
+          sizeof(tilemap_data) / sizeof(tilemap_data[0]),
+          sizeof(tilemap_data[0]) / sizeof(tilemap_data[0][0]),
+          tileSize),
+      _player(tileSize, tileSize, _tileMap)
 {
   if (SDL_Init(flags) != 0) throw SdlException();
 
@@ -66,10 +67,7 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
 
   _camera.reset(new libcamera2d::Camera_staticOffsetFromTarget(
       (_windowWidth - _player.width()) / 2, (_windowHeight - _player.height()) / 2, _windowWidth,
-      _windowHeight, _tileMap.width() * _tileSize, _tileMap.height() * _tileSize));
-
-  _player.worldWidth(_tileMap.width() * _tileSize);
-  _player.worldHeight(_tileMap.height() * _tileSize);
+      _windowHeight, _tileMap.width() * _tileMap.tilesize(), _tileMap.height() * _tileMap.tilesize()));
 
   updateCamera();
 }
@@ -87,15 +85,15 @@ void DemoSDL::draw()
   SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
   SDL_RenderClear(_renderer);
 
-  SDL_Rect tile = {0, 0, static_cast<int>(_tileSize), static_cast<int>(_tileSize)};
+  SDL_Rect tile = {0, 0, static_cast<int>(_tileMap.tilesize()), static_cast<int>(_tileMap.tilesize())};
   SDL_Rect player = {0, 0, static_cast<int>(_player.width()), static_cast<int>(_player.height())};
 
   for (unsigned int x = 0; x < _tileMap.width(); x++)
   {
     for (unsigned int y = 0; y < _tileMap.height(); y++)
     {
-      tile.x = x * _tileSize - _camera->x();
-      tile.y = y * _tileSize - _camera->y();
+      tile.x = x * _tileMap.tilesize() - _camera->x();
+      tile.y = y * _tileMap.tilesize() - _camera->y();
 
       if (_tileMap(x, y) == 0)
       {
