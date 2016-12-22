@@ -1,5 +1,8 @@
 #include "Player.hpp"
 
+#include <cmath>
+#include <iostream>
+
 Player::Player(unsigned int width, unsigned int height, const Tilemap& tilemap) :
     Object2D(width, height),
     _tilemap(&tilemap),
@@ -15,53 +18,131 @@ void Player::tilemap(const Tilemap& tilemap)
   _tilemap = &tilemap;
 }
 
-void Player::moveHorizontal(float value)
+void Player::moveRight(float value)
 {
-  /*
-  if (value < 0.0f) //LEFT
+  if(value > 1.0f) value = 1.0f;
+  if(value < 0.0f)
   {
-    if (_x <= Player::_horizontalMoveIncrement)
-    {
-      _x = 0;
-    }
-    else
-    {
-      _x -= Player::_horizontalMoveIncrement;
-    }
+    moveLeft(value);
+    return;
   }
-  else if (value > 0.0f) //RIGHT
-  {
-    _x += Player::_horizontalMoveIncrement;
 
-    if (_x >= (_worldWidth - _width))
+  const unsigned int tilesize = _tilemap->tilesize();
+  const unsigned int worldWidth = _tilemap->width() * tilesize;
+  const unsigned int oldX = _x;
+
+  _horizontalVelocity += _horizontalAcceleration;
+  if(_horizontalVelocity > _maxHorizontalVelocity) _horizontalVelocity = _maxHorizontalVelocity;
+  
+  _x = ((_x + _horizontalVelocity + _width) >= worldWidth) ? worldWidth - _width : _x + _horizontalVelocity;
+  
+  bool hitSomething = false;
+  for(unsigned int x = ((oldX + _width) / tilesize); (x <= ((_x + _width - 1) / tilesize)) && !hitSomething; x++)
+  {
+    for(unsigned int y = _y / tilesize; (y <= ((_y + _height -1) / tilesize)) && !hitSomething; y++)
     {
-      _x = _worldWidth - _width;
+      hitSomething |= _tilemap->at(x, y) != 0;
+      if(hitSomething)
+      {
+        _x = x * tilesize - _width;
+      }
     }
   }
-  */
 }
 
-void Player::moveVertical(float value)
+void Player::moveLeft(float value)
 {
-  /*
-  if (value < 0.0f) //UP
+  if(value > 1.0f) value = 1.0f;
+  if(value < 0.0f)
   {
-    if (_y <= Player::_verticalMoveIncrement)
+    moveRight(value);
+    return;
+  }
+
+  const unsigned int tilesize = _tilemap->tilesize();
+  const unsigned int worldWidth = _tilemap->width() * _tilemap->tilesize();
+  const unsigned int oldX = _x;
+
+  _horizontalVelocity -= _horizontalAcceleration;
+  if(_horizontalVelocity < (-_maxHorizontalVelocity)) _horizontalVelocity = -_maxHorizontalVelocity;
+
+  _x = (_x < (-_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
+
+  bool hitSomething = false;
+  for(unsigned int x = (oldX / tilesize); (x >= (_x / tilesize)) && !hitSomething; x--)
+  {
+    for(unsigned int y = _y / tilesize; (y <= ((_y + _height -1) / tilesize)) && !hitSomething; y++)
     {
-      _y = 0;
-    }
-    else
-    {
-      _y -= Player::_verticalMoveIncrement;
+      hitSomething |= _tilemap->at(x, y) != 0;
+      if(hitSomething)
+      {
+        _x = (x + 1) * tilesize;
+      }
     }
   }
-  else if (value > 0.0f) //DOWN
+
+}
+
+void Player::moveUp(float value)
+{
+  if(value > 1.0f) value = 1.0f;
+  if(value < 0.0f)
   {
-    _y += Player::_verticalMoveIncrement;
-    if (_y >= (_worldHeight - _height))
+    moveDown(value);
+    return;
+  }
+  
+  const unsigned int tilesize = _tilemap->tilesize();
+  const unsigned int worldHeight = _tilemap->height() * _tilemap->tilesize();
+  const unsigned int oldY = _y;
+
+  _verticalVelocity -= _verticalAcceleration;
+  if(_verticalVelocity < (-_maxHorizontalVelocity)) _verticalVelocity = -_maxHorizontalVelocity;
+
+  _y = (_y < (-_verticalVelocity)) ? 0 : _y + _verticalVelocity;
+
+  bool hitSomething = false;
+  for(unsigned int y = (oldY / tilesize); (y >= (_y / tilesize)) && !hitSomething; y--)
+  {
+    for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !hitSomething; x++)
     {
-      _y = _worldHeight - _height;
+      hitSomething |= _tilemap->at(x, y) != 0;
+      if(hitSomething)
+      {
+        _y = (y + 1) * tilesize;
+      }
     }
   }
-  */
+}
+
+void Player::moveDown(float value)
+{
+  if(value > 1.0f) value = 1.0f;
+  if(value < 0.0f)
+  {
+    moveUp(value);
+    return;
+  }
+
+  const unsigned int tilesize = _tilemap->tilesize();
+  const unsigned int worldHeight = _tilemap->height() * tilesize;
+  unsigned int oldY = _y;
+
+  _verticalVelocity += _verticalAcceleration;
+  if(_verticalVelocity > _maxHorizontalVelocity) _verticalVelocity = _maxHorizontalVelocity;
+  
+  _y = ((_y + _verticalVelocity + _height) > worldHeight) ? worldHeight - _height : _y + _verticalVelocity;
+  
+  bool hitSomething = false;
+  for(unsigned int y = ((oldY + _height) / tilesize); (y <= ((_y + _height - 1) / tilesize)) && !hitSomething; y++)
+  {
+    for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !hitSomething; x++)
+    {
+      hitSomething |= _tilemap->at(x, y) != 0;
+      if(hitSomething)
+      {
+        _y = y * tilesize - _height;
+      }
+    }
+  }
 }

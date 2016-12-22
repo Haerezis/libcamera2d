@@ -10,7 +10,9 @@ class Tilemap
 
     virtual ~Tilemap();
 
-    unsigned char& operator()(unsigned int x, unsigned int y);
+    unsigned char& at(unsigned int x, unsigned int y);
+    
+    unsigned char at(unsigned int x, unsigned int y) const;
 
     unsigned int width() const;
     

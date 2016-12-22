@@ -61,7 +61,7 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
   {
     for (unsigned int y = 0; y < _tileMap.height(); y++)
     {
-      _tileMap(x, y) = tilemap_data[x][y];
+      _tileMap.at(x, y) = tilemap_data[x][y];
     }
   }
 
@@ -95,7 +95,7 @@ void DemoSDL::draw()
       tile.x = x * _tileMap.tilesize() - _camera->x();
       tile.y = y * _tileMap.tilesize() - _camera->y();
 
-      if (_tileMap(x, y) == 0)
+      if (_tileMap.at(x, y) == 0)
       {
         SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
       }
@@ -151,20 +151,20 @@ void DemoSDL::handleKeyboardState()
 
   if (state[SDL_SCANCODE_UP])
   {
-    _player.moveVertical(-1.0f);
+    _player.moveUp(1.0f);
   }
   if (state[SDL_SCANCODE_DOWN])
   {
-    _player.moveVertical(1.0f);
+    _player.moveDown(1.0f);
   }
 
   if (state[SDL_SCANCODE_LEFT])
   {
-    _player.moveHorizontal(-1.0f);
+    _player.moveLeft(1.0f);
   }
   if (state[SDL_SCANCODE_RIGHT])
   {
-    _player.moveHorizontal(1.0f);
+    _player.moveRight(1.0f);
   }
 }
 

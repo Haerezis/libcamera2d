@@ -61,7 +61,7 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
   {
     for (unsigned int y = 0; y < _tileMap.height(); y++)
     {
-      _tileMap(x, y) = tilemap_data[x][y];
+      _tileMap.at(x, y) = tilemap_data[x][y];
     }
   }
 
@@ -98,7 +98,7 @@ void DemoSDL::draw()
       tile.x = x * _tileMap.tilesize() - _camera->x();
       tile.y = y * _tileMap.tilesize() - _camera->y();
 
-      if (_tileMap(x, y) == 0)
+      if (_tileMap.at(x, y) == 0)
       {
         SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
       }

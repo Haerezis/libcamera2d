@@ -17,9 +17,13 @@ class Player : public libcamera2d::Object2D
 
   void tilemap(const Tilemap& tilemap);
 
-  void moveHorizontal(float value);
+  void moveRight(float value);
 
-  void moveVertical(float value);
+  void moveLeft(float value);
+
+  void moveUp(float value);
+
+  void moveDown(float value);
 
  protected:
   //This is a pointer because it should be mutable, so it can't be a reference,
@@ -32,10 +36,10 @@ class Player : public libcamera2d::Object2D
 
   static const int _maxHorizontalVelocity = 4;
 
-  static const int _maxVerticalVelocity = 4;
+  static const int _maxVerticalVelocity = 8;
 
   static const unsigned int _horizontalAcceleration = 4;
-  static const unsigned int _verticalAcceleration = 4;
+  static const unsigned int _verticalAcceleration = 8;
 };
 
 #endif
