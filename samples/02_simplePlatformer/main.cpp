@@ -52,10 +52,17 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
 {
   if (SDL_Init(flags) != 0) throw SdlException();
 
-  auto res = SDL_CreateWindowAndRenderer(_windowWidth, _windowHeight, SDL_WINDOW_SHOWN, &_window,
-                                         &_renderer);
+  _window = SDL_CreateWindow(
+      "02_simplePlatformer",
+      SDL_WINDOWPOS_UNDEFINED,
+      SDL_WINDOWPOS_UNDEFINED,
+      _windowWidth,
+      _windowHeight,
+      SDL_WINDOW_SHOWN);
 
-  if (res != 0) throw SdlException();
+  _renderer = SDL_CreateRenderer(_window , -1, SDL_RENDERER_PRESENTVSYNC); 
+
+  if (_window == NULL) throw SdlException();
 
   for (unsigned int x = 0; x < _tileMap.width(); x++)
   {
@@ -151,12 +158,12 @@ void DemoSDL::handleKeyboardState()
 
   if (state[SDL_SCANCODE_UP])
   {
-    _player.moveUp(1.0f);
+    _player.jump();
   }
-  if (state[SDL_SCANCODE_DOWN])
-  {
-    _player.moveDown(1.0f);
-  }
+  //if (state[SDL_SCANCODE_DOWN])
+  //{
+    //_player.moveDown(1.0f);
+  //}
 
   if (state[SDL_SCANCODE_LEFT])
   {
@@ -170,6 +177,7 @@ void DemoSDL::handleKeyboardState()
 
 void DemoSDL::updateCamera()
 {
+  _player.updatePosition();
   _camera->update(_player.x(), _player.y());
 }
 

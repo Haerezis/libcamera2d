@@ -3,6 +3,14 @@
 #include <cmath>
 #include <iostream>
 
+const float Player::_horizontalAcceleration = 4.0f;
+const float Player::_jumpVelocity = 15.0f;
+const float Player::_gravityAcceleration = 0.7f;
+const float Player::_horizontalFrictionAccelerationCoefficient = 0.9f;
+
+const float Player::_maxHorizontalVelocity = 4.0f;
+const float Player::_maxVerticalVelocity = 20.0f;
+
 Player::Player(unsigned int width, unsigned int height, const Tilemap& tilemap) :
     Object2D(width, height),
     _tilemap(&tilemap),
@@ -26,13 +34,67 @@ void Player::moveRight(float value)
     moveLeft(value);
     return;
   }
+  
+  _horizontalVelocity += value * _horizontalAcceleration;
+  if(_horizontalVelocity > _maxHorizontalVelocity) _horizontalVelocity = _maxHorizontalVelocity;
+}
+
+void Player::moveLeft(float value)
+{
+  if(value > 1.0f) value = 1.0f;
+  if(value < 0.0f)
+  {
+    moveRight(value);
+    return;
+  }
+  
+  _horizontalVelocity -= value * _horizontalAcceleration;
+  if(_horizontalVelocity < (-_maxHorizontalVelocity)) _horizontalVelocity = -_maxHorizontalVelocity;
+}
+
+void Player::jump()
+{
+
+  if(_isGrounded())
+  {
+    _verticalVelocity = -_jumpVelocity;
+    if(_verticalVelocity < (-_maxVerticalVelocity)) _verticalVelocity = -_maxVerticalVelocity;
+  }
+}
+
+void Player::_applyGravityAcceleration()
+{
+  _verticalVelocity += _gravityAcceleration;
+  if(_verticalVelocity > _maxVerticalVelocity) _verticalVelocity = _maxVerticalVelocity;
+}
+  
+void Player::_applyHorizontalFrictionAcceleration()
+{
+  _horizontalVelocity *= _horizontalFrictionAccelerationCoefficient;
+  if(_horizontalVelocity < 0.01f) _horizontalVelocity = 0.0f;
+}
+
+void Player::updatePosition()
+{
+  _moveLeft();
+  _moveRight();
+  _moveUp();
+  _moveDown();
+
+  _applyGravityAcceleration();
+  _applyHorizontalFrictionAcceleration();
+}
+
+void Player::_moveRight()
+{
+  if(_horizontalVelocity <= 0.0f)
+  {
+    return;
+  }
 
   const unsigned int tilesize = _tilemap->tilesize();
   const unsigned int worldWidth = _tilemap->width() * tilesize;
   const unsigned int oldX = _x;
-
-  _horizontalVelocity += _horizontalAcceleration;
-  if(_horizontalVelocity > _maxHorizontalVelocity) _horizontalVelocity = _maxHorizontalVelocity;
   
   _x = ((_x + _horizontalVelocity + _width) >= worldWidth) ? worldWidth - _width : _x + _horizontalVelocity;
   
@@ -50,21 +112,15 @@ void Player::moveRight(float value)
   }
 }
 
-void Player::moveLeft(float value)
+void Player::_moveLeft()
 {
-  if(value > 1.0f) value = 1.0f;
-  if(value < 0.0f)
+  if(_horizontalVelocity >= 0.0f)
   {
-    moveRight(value);
     return;
   }
 
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int worldWidth = _tilemap->width() * _tilemap->tilesize();
   const unsigned int oldX = _x;
-
-  _horizontalVelocity -= _horizontalAcceleration;
-  if(_horizontalVelocity < (-_maxHorizontalVelocity)) _horizontalVelocity = -_maxHorizontalVelocity;
 
   _x = (_x < (-_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
 
@@ -83,26 +139,20 @@ void Player::moveLeft(float value)
 
 }
 
-void Player::moveUp(float value)
+void Player::_moveUp()
 {
-  if(value > 1.0f) value = 1.0f;
-  if(value < 0.0f)
+  if(_verticalVelocity >= 0.0f)
   {
-    moveDown(value);
     return;
   }
   
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int worldHeight = _tilemap->height() * _tilemap->tilesize();
   const unsigned int oldY = _y;
-
-  _verticalVelocity -= _verticalAcceleration;
-  if(_verticalVelocity < (-_maxHorizontalVelocity)) _verticalVelocity = -_maxHorizontalVelocity;
 
   _y = (_y < (-_verticalVelocity)) ? 0 : _y + _verticalVelocity;
 
   bool hitSomething = false;
-  for(unsigned int y = (oldY / tilesize); (y >= (_y / tilesize)) && !hitSomething; y--)
+  for(unsigned int y = (_y / tilesize) ; (y <= (oldY / tilesize)) && !hitSomething; y++)
   {
     for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !hitSomething; x++)
     {
@@ -115,12 +165,10 @@ void Player::moveUp(float value)
   }
 }
 
-void Player::moveDown(float value)
+void Player::_moveDown()
 {
-  if(value > 1.0f) value = 1.0f;
-  if(value < 0.0f)
+  if(_verticalVelocity <= 0.0f)
   {
-    moveUp(value);
     return;
   }
 
@@ -128,9 +176,6 @@ void Player::moveDown(float value)
   const unsigned int worldHeight = _tilemap->height() * tilesize;
   unsigned int oldY = _y;
 
-  _verticalVelocity += _verticalAcceleration;
-  if(_verticalVelocity > _maxHorizontalVelocity) _verticalVelocity = _maxHorizontalVelocity;
-  
   _y = ((_y + _verticalVelocity + _height) > worldHeight) ? worldHeight - _height : _y + _verticalVelocity;
   
   bool hitSomething = false;
@@ -145,4 +190,18 @@ void Player::moveDown(float value)
       }
     }
   }
+}
+
+bool Player::_isGrounded()
+{
+  const unsigned int tilesize = _tilemap->tilesize();
+  unsigned int y = (_y + _height + 1) / tilesize;
+  bool standOnSomething = false;
+
+  for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !standOnSomething; x++)
+  {
+    standOnSomething |= _tilemap->at(x, y) != 0;
+  }
+
+  return standOnSomething;
 }

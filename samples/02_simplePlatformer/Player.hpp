@@ -21,25 +21,41 @@ class Player : public libcamera2d::Object2D
 
   void moveLeft(float value);
 
-  void moveUp(float value);
+  void jump();
 
-  void moveDown(float value);
+  void updatePosition();
 
  protected:
-  //This is a pointer because it should be mutable, so it can't be a reference,
+  void _applyGravityAcceleration();
+
+  void _applyHorizontalFrictionAcceleration();
+
+  void _moveRight();
+
+  void _moveLeft();
+
+  void _moveUp();
+
+  void _moveDown();
+
+  bool _isGrounded();
+
+  //This is a pointer because it should be mutable at runtime, so it cannot be a reference,
   //but we don't want to copy it when changing it (a tilemap can have a big memory footprint)
   const Tilemap * _tilemap;
 
-  int _horizontalVelocity;
+  float _horizontalVelocity;
 
-  int _verticalVelocity;
+  float _verticalVelocity;
 
-  static const int _maxHorizontalVelocity = 4;
+  static const float _maxHorizontalVelocity;
 
-  static const int _maxVerticalVelocity = 8;
+  static const float _maxVerticalVelocity;
 
-  static const unsigned int _horizontalAcceleration = 4;
-  static const unsigned int _verticalAcceleration = 8;
+  static const float _horizontalAcceleration;
+  static const float _jumpVelocity;
+  static const float _gravityAcceleration;
+  static const float _horizontalFrictionAccelerationCoefficient;
 };
 
 #endif
