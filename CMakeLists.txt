@@ -13,6 +13,7 @@ set(VERSION_PATCH 0)
 
 
 add_definitions("-std=c++11")
+add_definitions("-Wall")
 
 
 set(INTERNAL_LIBS "")
