@@ -54,16 +54,16 @@ class Camera : public Object2D
 
  protected:
   /**
-   * The height (in pixels) of the world in which the camera is moving.
-   * If 0, the world doesn't have any Y axis bound.
-   */
-  unsigned int _worldHeight;
-
-  /**
    * The width (in pixels) of the world in which the camera is moving.
    * If 0, the world doesn't have any X axis bound.
    */
   unsigned int _worldWidth;
+
+  /**
+   * The height (in pixels) of the world in which the camera is moving.
+   * If 0, the world doesn't have any Y axis bound.
+   */
+  unsigned int _worldHeight;
 };
 }
 

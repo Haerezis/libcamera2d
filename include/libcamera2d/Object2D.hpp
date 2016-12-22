@@ -77,14 +77,15 @@ class Object2D
   unsigned int _y;
 
   /**
+   * The width of the object.
+   */
+  unsigned int _width;
+
+  /**
    * The height of the object.
    */
   unsigned int _height;
 
-  /**
-   * The width of the object.
-   */
-  unsigned int _width;
 };
 }
 

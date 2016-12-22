@@ -3,10 +3,10 @@
 #include <stdexcept>
 
 Tilemap::Tilemap(unsigned int width, unsigned int height, unsigned int tilesize) :
+  _data(width * height, 0),
   _width(width),
   _height(height),
-  _tilesize(tilesize),
-  _data(width * height, 0)
+  _tilesize(tilesize)
 {
 }
 
