@@ -3,8 +3,6 @@ project(libcamera2d)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-find_package(SDL2 REQUIRED)
-
 # setup version numbers
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 2)
