@@ -156,7 +156,7 @@ void DemoSDL::handleKeyboardState()
 {
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
-  if (state[SDL_SCANCODE_UP])
+  if (state[SDL_SCANCODE_UP] | state[SDL_SCANCODE_SPACE])
   {
     _player.jump();
   }
