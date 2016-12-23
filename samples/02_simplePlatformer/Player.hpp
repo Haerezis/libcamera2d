@@ -26,7 +26,7 @@ class Player : public libcamera2d::Object2D
   void updatePosition();
 
  protected:
-  void _applyGravityAcceleration();
+  void _applyFallAcceleration();
 
   void _applyHorizontalFrictionAcceleration();
 
@@ -54,7 +54,7 @@ class Player : public libcamera2d::Object2D
 
   static const float _horizontalAcceleration;
   static const float _jumpVelocity;
-  static const float _gravityAcceleration;
+  static const float _fallAcceleration;
   static const float _horizontalFrictionAccelerationCoefficient;
 };
 

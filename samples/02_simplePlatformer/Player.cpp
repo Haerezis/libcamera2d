@@ -5,7 +5,7 @@
 
 const float Player::_horizontalAcceleration = 4.0f;
 const float Player::_jumpVelocity = 15.0f;
-const float Player::_gravityAcceleration = 0.7f;
+const float Player::_fallAcceleration = 0.7f;
 const float Player::_horizontalFrictionAccelerationCoefficient = 0.9f;
 
 const float Player::_maxHorizontalVelocity = 4.0f;
@@ -62,16 +62,16 @@ void Player::jump()
   }
 }
 
-void Player::_applyGravityAcceleration()
+void Player::_applyFallAcceleration()
 {
-  _verticalVelocity += _gravityAcceleration;
+  _verticalVelocity += _fallAcceleration;
   if(_verticalVelocity > _maxVerticalVelocity) _verticalVelocity = _maxVerticalVelocity;
 }
   
 void Player::_applyHorizontalFrictionAcceleration()
 {
   _horizontalVelocity *= _horizontalFrictionAccelerationCoefficient;
-  if(_horizontalVelocity < 0.01f) _horizontalVelocity = 0.0f;
+  if(std::fabs(_horizontalVelocity) < 0.01f) _horizontalVelocity = 0.0f;
 }
 
 void Player::updatePosition()
@@ -81,7 +81,13 @@ void Player::updatePosition()
   _moveUp();
   _moveDown();
 
-  _applyGravityAcceleration();
+  //TODO check if touching a solid tile of the left/right/up/down -> if so, set velocity for the direction to 0.
+  //TODO only apply gravity/fall when falling -> not grounded.
+
+  if(!_isGrounded())
+  {
+    _applyFallAcceleration();
+  }
   _applyHorizontalFrictionAcceleration();
 }
 
@@ -125,7 +131,7 @@ void Player::_moveLeft()
   _x = (_x < (-_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
 
   bool hitSomething = false;
-  for(unsigned int x = (oldX / tilesize); (x >= (_x / tilesize)) && !hitSomething; x--)
+  for(unsigned int x = (_x / tilesize); (x <= (oldX / tilesize)) && !hitSomething; x++)
   {
     for(unsigned int y = _y / tilesize; (y <= ((_y + _height -1) / tilesize)) && !hitSomething; y++)
     {
