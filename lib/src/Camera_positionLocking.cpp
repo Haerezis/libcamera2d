@@ -1,17 +1,17 @@
-#include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
+#include "libcamera2d/Camera_positionLocking.hpp"
 
 namespace libcamera2d
 {
-Camera_staticOffsetFromTarget::Camera_staticOffsetFromTarget(
+Camera_positionLocking::Camera_positionLocking(
     unsigned int offsetX, unsigned int offsetY, unsigned int width, unsigned int height,
     unsigned int worldWidth, unsigned int worldHeight)
     : Camera(width, height, worldWidth, worldHeight), _offsetX(offsetX), _offsetY(offsetY)
 {
 }
 
-Camera_staticOffsetFromTarget::~Camera_staticOffsetFromTarget() {}
+Camera_positionLocking::~Camera_positionLocking() {}
 
-void Camera_staticOffsetFromTarget::update(unsigned int targetX, unsigned int targetY)
+void Camera_positionLocking::update(unsigned int targetX, unsigned int targetY)
 {
   if (targetX < _offsetX)
     _x = 0;

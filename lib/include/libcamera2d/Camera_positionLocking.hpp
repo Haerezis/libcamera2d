@@ -1,21 +1,26 @@
-#ifndef _LIBCAMERA2D_CAMERA__STATIC_OFFSET_FROM_PLAYER_HPP
-#define _LIBCAMERA2D_CAMERA__STATIC_OFFSET_FROM_PLAYER_HPP
+#ifndef _LIBCAMERA2D_CAMERA__POSITION_LOCKING_HPP
+#define _LIBCAMERA2D_CAMERA__POSITION_LOCKING_HPP
 
 #include "libcamera2d/Camera.hpp"
 
 namespace libcamera2d
 {
-class Camera_staticOffsetFromTarget : public Camera
+/**
+ * Camera which have its position locked to the target position with on offset.
+ * This camera also implement an edge-snapping mecanism that stop the camera from moving in
+ * a direction when it reach an edge of the world.
+ */
+class Camera_positionLocking : public Camera
 {
  public:
-  Camera_staticOffsetFromTarget(unsigned int offsetX, unsigned int offsetY, unsigned int width,
+  Camera_positionLocking(unsigned int offsetX, unsigned int offsetY, unsigned int width,
                                 unsigned int height, unsigned int worldWidth,
                                 unsigned int worldHeight);
 
   /**
    * Destructor.
    */
-  virtual ~Camera_staticOffsetFromTarget();
+  virtual ~Camera_positionLocking();
 
   /**
   * Update the camera properties (position, size, etc..) based on the target position.

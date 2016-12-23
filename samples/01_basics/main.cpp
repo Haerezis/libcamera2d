@@ -6,7 +6,7 @@
 #include <SDL.h>
 
 #include "Player.hpp"
-#include "libcamera2d/Camera_staticOffsetFromTarget.hpp"
+#include "libcamera2d/Camera_positionLocking.hpp"
 #include "tilemap_data.hpp"
 #include "Tilemap.hpp"
 #include "SdlException.hpp"
@@ -34,7 +34,7 @@ class DemoSDL
 
   Player _player;
 
-  std::unique_ptr<libcamera2d::Camera_staticOffsetFromTarget> _camera;
+  std::unique_ptr<libcamera2d::Camera_positionLocking> _camera;
 
   SDL_Window* _window;
   SDL_Renderer* _renderer;
@@ -65,7 +65,7 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
     }
   }
 
-  _camera.reset(new libcamera2d::Camera_staticOffsetFromTarget(
+  _camera.reset(new libcamera2d::Camera_positionLocking(
       (_windowWidth - _player.width()) / 2, (_windowHeight - _player.height()) / 2, _windowWidth,
       _windowHeight, _tileMap.width() * _tileMap.tilesize(), _tileMap.height() * _tileMap.tilesize()));
 

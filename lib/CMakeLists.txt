@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 set(
   HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Camera.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Camera_staticOffsetFromTarget.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Camera_positionLocking.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/libcamera2d.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Object2D.hpp
 )
@@ -11,7 +11,7 @@ set(
 set(
   SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/Camera.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/Camera_staticOffsetFromTarget.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Camera_positionLocking.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/libcamera2d.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/Object2D.cpp
 )
