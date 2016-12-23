@@ -1,33 +1,34 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required(VERSION 3.0)
+project(samples)
 
-#Macro listing subdirectories of a directory.
-MACRO(SUBDIRLIST result curdir)
-  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
-  SET(dirlist "")
-  FOREACH(child ${children})
-  IF(IS_DIRECTORY ${curdir}/${child})
-    LIST(APPEND dirlist ${child})
-  ENDIF()
-  ENDFOREACH()
-  SET(${result} ${dirlist})
-ENDMACRO()
+find_package(SDL2 REQUIRED)
 
-set(SRC_FILES "")
-set(HEADER_FILES "")
+set(
+  SAMPLES
+  01_basics
+  02_simplePlatformer
+)
 
-file(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-list(APPEND SRC_FILES ${FILES})
+add_library(
+  libsample
+  ${samples_SOURCE_DIR}/SdlException.cpp
+  ${samples_SOURCE_DIR}/SdlException.hpp
+  ${samples_SOURCE_DIR}/Tilemap.cpp
+  ${samples_SOURCE_DIR}/Tilemap.hpp
+)
+target_include_directories(
+  libsample
+  PUBLIC
+    ${SDL2_INCLUDE_DIR}
+    ${samples_SOURCE_DIR}
+)
+target_link_libraries(
+  libsample
+  ${SDL2_LIBRARY}
+  ${CMAKE_PROJECT_NAME}
+)
+set_target_properties(libsample PROPERTIES PREFIX "")
 
-file(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
-list(APPEND HEADER_FILES ${FILES})
-file(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.tpl")
-list(APPEND HEADER_FILES ${FILES})
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-#For every subdirectory, we add an executable named after the directory name.
-#This executable is linked to libscrollingcamera and SDL.
-SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
-FOREACH(subdir ${SUBDIRS})
+foreach (subdir ${SAMPLES})
   add_subdirectory(${subdir})
-ENDFOREACH()
+endforeach ()

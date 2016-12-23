@@ -1,8 +1,5 @@
-cmake_minimum_required (VERSION 3.0)
-
-# project name
-set(PROJECT_NAME "libcamera2d")
-project (${PROJECT_NAME})
+cmake_minimum_required(VERSION 3.0)
+project(libcamera2d)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
@@ -12,17 +9,9 @@ set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 
 
-add_definitions("-std=c++11")
-add_definitions("-Wall")
-
-
-set(INTERNAL_LIBS "")
-set(EXTERNAL_LIBS "")
-set(DEFINES "")
-set(WARNING "")
-set(FLAGS "")
-set(CMAKE_CXX_FLAGS "${DEFINES} ${WARNING} ${FLAGS}")
-
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra ${CMAKE_CXX_FLAGS}")
+endif ()
 
 set(OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin/")
 
@@ -41,8 +30,10 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 option(BUILD_DOC "build the documentation (doxygen is require)")
 option(BUILD_SAMPLES "build the samples" ON)
 
-add_subdirectory(src)
+add_subdirectory(lib)
 
+# Optional samples
 if(${BUILD_SAMPLES})
   add_subdirectory(samples)
 endif()
+
