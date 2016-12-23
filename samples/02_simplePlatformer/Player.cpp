@@ -3,12 +3,12 @@
 #include <cmath>
 #include <iostream>
 
-const float Player::_horizontalAcceleration = 4.0f;
+const float Player::_horizontalAcceleration = 5.0f;
 const float Player::_jumpVelocity = 15.0f;
 const float Player::_fallAcceleration = 0.7f;
-const float Player::_horizontalFrictionAccelerationCoefficient = 0.9f;
+const float Player::_horizontalFrictionAccelerationCoefficient = 0.8f;
 
-const float Player::_maxHorizontalVelocity = 4.0f;
+const float Player::_maxHorizontalVelocity = 7.0f;
 const float Player::_maxVerticalVelocity = 20.0f;
 
 Player::Player(unsigned int width, unsigned int height, const Tilemap& tilemap) :
@@ -49,16 +49,16 @@ void Player::moveLeft(float value)
   }
   
   _horizontalVelocity -= value * _horizontalAcceleration;
-  if(_horizontalVelocity < (-_maxHorizontalVelocity)) _horizontalVelocity = -_maxHorizontalVelocity;
+  if(std::fabs(_horizontalVelocity) > _maxHorizontalVelocity) _horizontalVelocity = -_maxHorizontalVelocity;
 }
 
 void Player::jump()
 {
 
-  if(_isGrounded())
+  if(_isTouchingBottomTile())
   {
     _verticalVelocity = -_jumpVelocity;
-    if(_verticalVelocity < (-_maxVerticalVelocity)) _verticalVelocity = -_maxVerticalVelocity;
+    if(std::fabs(_verticalVelocity) >_maxVerticalVelocity) _verticalVelocity = -_maxVerticalVelocity;
   }
 }
 
@@ -70,8 +70,9 @@ void Player::_applyFallAcceleration()
   
 void Player::_applyHorizontalFrictionAcceleration()
 {
+  //_horizontalVelocity = 0;
   _horizontalVelocity *= _horizontalFrictionAccelerationCoefficient;
-  if(std::fabs(_horizontalVelocity) < 0.01f) _horizontalVelocity = 0.0f;
+  if(std::fabs(_horizontalVelocity) < 1.0f) _horizontalVelocity = 0.0f;
 }
 
 void Player::updatePosition()
@@ -81,10 +82,19 @@ void Player::updatePosition()
   _moveUp();
   _moveDown();
 
-  //TODO check if touching a solid tile of the left/right/up/down -> if so, set velocity for the direction to 0.
-  //TODO only apply gravity/fall when falling -> not grounded.
+  //If we touch a tile on the bottop or top of the player, we reset vertical velocity to avoid to "hover"
+  if((_isTouchingTopTile() && (_verticalVelocity < 0.0f)) || (_isTouchingBottomTile() && (_verticalVelocity > 0.0f)))
+  {
+    _verticalVelocity *= 0.2f;
+  }
+  //If we touch a tile on the left or right of the player, we reset horizontal velocity
+  if(_isTouchingLeftTile() || _isTouchingRightTile())
+  if((_isTouchingLeftTile() && (_horizontalVelocity < 0.0f)) || (_isTouchingRightTile() && (_horizontalVelocity > 0.0f)))
+  {
+    _horizontalVelocity *= 0.2f;
+  }
 
-  if(!_isGrounded())
+  if(!_isTouchingBottomTile())
   {
     _applyFallAcceleration();
   }
@@ -128,7 +138,7 @@ void Player::_moveLeft()
   const unsigned int tilesize = _tilemap->tilesize();
   const unsigned int oldX = _x;
 
-  _x = (_x < (-_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
+  _x = (_x < std::fabs(_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
 
   bool hitSomething = false;
   for(unsigned int x = (_x / tilesize); (x <= (oldX / tilesize)) && !hitSomething; x++)
@@ -155,7 +165,7 @@ void Player::_moveUp()
   const unsigned int tilesize = _tilemap->tilesize();
   const unsigned int oldY = _y;
 
-  _y = (_y < (-_verticalVelocity)) ? 0 : _y + _verticalVelocity;
+  _y = (_y < std::fabs(_verticalVelocity)) ? 0 : _y + _verticalVelocity;
 
   bool hitSomething = false;
   for(unsigned int y = (_y / tilesize) ; (y <= (oldY / tilesize)) && !hitSomething; y++)
@@ -198,16 +208,70 @@ void Player::_moveDown()
   }
 }
 
-bool Player::_isGrounded()
+bool Player::_isTouchingBottomTile()
 {
   const unsigned int tilesize = _tilemap->tilesize();
   unsigned int y = (_y + _height + 1) / tilesize;
-  bool standOnSomething = false;
+  bool isTouching = false;
+  
+  //If we are on the bottomest line of the tilemap, we consider that we are touching a tile.
+  isTouching = _y >= (_tilemap->height() - 1) * tilesize;
 
-  for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !standOnSomething; x++)
+  for(unsigned int x = _x / tilesize; (x <= ((_x + _width - 1) / tilesize)) && !isTouching; x++)
   {
-    standOnSomething |= _tilemap->at(x, y) != 0;
+    isTouching |= _tilemap->at(x, y) != 0;
   }
 
-  return standOnSomething;
+  return isTouching;
+}
+
+bool Player::_isTouchingTopTile()
+{
+  const unsigned int tilesize = _tilemap->tilesize();
+  unsigned int y = (_y - 1) / tilesize;
+  bool isTouching = false;
+  
+  //If we are on the toppest position of the tilemap, we consider that we are touching a tile.
+  isTouching = _y == 0;
+
+  for(unsigned int x = _x / tilesize; (x <= ((_x + _width - 1) / tilesize)) && !isTouching; x++)
+  {
+    isTouching |= _tilemap->at(x, y) != 0;
+  }
+
+  return isTouching;
+}
+
+bool Player::_isTouchingLeftTile()
+{
+  return false;
+  const unsigned int tilesize = _tilemap->tilesize();
+  unsigned int x = (_x + _width + 1) / tilesize;
+  bool isTouching = false;
+  
+  isTouching = _x == 0;
+
+  for(unsigned int y = _y / tilesize; (y <= ((_y + _height - 1) / tilesize)) && !isTouching; y++)
+  {
+    isTouching |= _tilemap->at(x, y) != 0;
+  }
+
+  return isTouching;
+}
+
+bool Player::_isTouchingRightTile()
+{
+  return false;
+  const unsigned int tilesize = _tilemap->tilesize();
+  unsigned int x = (_x + _width + 1) / tilesize;
+  bool isTouching = false;
+
+  isTouching = _x >= (_tilemap->width() - 1) * tilesize;
+
+  for(unsigned int y = _y / tilesize; (y <= ((_y + _height - 1) / tilesize)) && !isTouching; y++)
+  {
+    isTouching |= _tilemap->at(x, y) != 0;
+  }
+
+  return isTouching;
 }

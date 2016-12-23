@@ -38,7 +38,13 @@ class Player : public libcamera2d::Object2D
 
   void _moveDown();
 
-  bool _isGrounded();
+  bool _isTouchingBottomTile();
+
+  bool _isTouchingTopTile();
+  
+  bool _isTouchingLeftTile();
+  
+  bool _isTouchingRightTile();
 
   //This is a pointer because it should be mutable at runtime, so it cannot be a reference,
   //but we don't want to copy it when changing it (a tilemap can have a big memory footprint)
