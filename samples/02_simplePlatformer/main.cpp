@@ -181,7 +181,7 @@ void DemoSDL::updateCamera()
   _camera->update(_player.x(), _player.y());
 }
 
-int main(int argc, char** argv)
+int main()
 {
   try
   {
