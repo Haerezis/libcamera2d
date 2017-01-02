@@ -12,7 +12,7 @@ const float Player::_maxHorizontalVelocity = 7.0f;
 const float Player::_maxVerticalVelocity = 20.0f;
 
 Player::Player(unsigned int width, unsigned int height, const Tilemap& tilemap) :
-    Object2D(width, height),
+    Object2D(width, height, tilemap.tilesize() * tilemap.width(), tilemap.tilesize() * tilemap.height()),
     _tilemap(&tilemap),
     _horizontalVelocity(0),
     _verticalVelocity(0)
@@ -109,20 +109,19 @@ void Player::_moveRight()
   }
 
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int worldWidth = _tilemap->width() * tilesize;
-  const unsigned int oldX = _x;
+  const unsigned int oldX = x();
   
-  _x = ((_x + _horizontalVelocity + _width) >= worldWidth) ? worldWidth - _width : _x + _horizontalVelocity;
+  x(((x() + _horizontalVelocity + width()) >= worldWidth()) ? worldWidth() - width() : x() + _horizontalVelocity);
   
   bool hitSomething = false;
-  for(unsigned int x = ((oldX + _width) / tilesize); (x <= ((_x + _width - 1) / tilesize)) && !hitSomething; x++)
+  for(unsigned int x = ((oldX + width()) / tilesize); (x <= ((this->x() + width() - 1) / tilesize)) && !hitSomething; x++)
   {
-    for(unsigned int y = _y / tilesize; (y <= ((_y + _height -1) / tilesize)) && !hitSomething; y++)
+    for(unsigned int y = this->y() / tilesize; (y <= ((this->y() + height() -1) / tilesize)) && !hitSomething; y++)
     {
       hitSomething |= _tilemap->at(x, y) != 0;
       if(hitSomething)
       {
-        _x = x * tilesize - _width;
+        this->x(x * tilesize - width());
       }
     }
   }
@@ -136,19 +135,19 @@ void Player::_moveLeft()
   }
 
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int oldX = _x;
+  const unsigned int oldX = x();
 
-  _x = (_x < std::fabs(_horizontalVelocity)) ? 0 : _x + _horizontalVelocity;
+  x((x() < std::fabs(_horizontalVelocity)) ? 0 : x() + _horizontalVelocity);
 
   bool hitSomething = false;
-  for(unsigned int x = (_x / tilesize); (x <= (oldX / tilesize)) && !hitSomething; x++)
+  for(unsigned int x = (this->x() / tilesize); (x <= (oldX / tilesize)) && !hitSomething; x++)
   {
-    for(unsigned int y = _y / tilesize; (y <= ((_y + _height -1) / tilesize)) && !hitSomething; y++)
+    for(unsigned int y = this->y() / tilesize; (y <= ((this->y() + height() -1) / tilesize)) && !hitSomething; y++)
     {
       hitSomething |= _tilemap->at(x, y) != 0;
       if(hitSomething)
       {
-        _x = (x + 1) * tilesize;
+        this->x((x + 1) * tilesize);
       }
     }
   }
@@ -163,19 +162,19 @@ void Player::_moveUp()
   }
   
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int oldY = _y;
+  const unsigned int oldY = y();
 
-  _y = (_y < std::fabs(_verticalVelocity)) ? 0 : _y + _verticalVelocity;
+  y((y() < std::fabs(_verticalVelocity)) ? 0 : y() + _verticalVelocity);
 
   bool hitSomething = false;
-  for(unsigned int y = (_y / tilesize) ; (y <= (oldY / tilesize)) && !hitSomething; y++)
+  for(unsigned int y = (this->y() / tilesize) ; (y <= (oldY / tilesize)) && !hitSomething; y++)
   {
-    for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !hitSomething; x++)
+    for(unsigned int x = this->x() / tilesize; (x <= ((this->x() + width() -1) / tilesize)) && !hitSomething; x++)
     {
       hitSomething |= _tilemap->at(x, y) != 0;
       if(hitSomething)
       {
-        _y = (y + 1) * tilesize;
+        this->y((y + 1) * tilesize);
       }
     }
   }
@@ -189,20 +188,19 @@ void Player::_moveDown()
   }
 
   const unsigned int tilesize = _tilemap->tilesize();
-  const unsigned int worldHeight = _tilemap->height() * tilesize;
-  unsigned int oldY = _y;
+  unsigned int oldY = y();
 
-  _y = ((_y + _verticalVelocity + _height) > worldHeight) ? worldHeight - _height : _y + _verticalVelocity;
+  y(((y() + _verticalVelocity + height()) > worldHeight()) ? worldHeight() - height() : y() + _verticalVelocity);
   
   bool hitSomething = false;
-  for(unsigned int y = ((oldY + _height) / tilesize); (y <= ((_y + _height - 1) / tilesize)) && !hitSomething; y++)
+  for(unsigned int y = ((oldY + height()) / tilesize); (y <= ((this->y() + height() - 1) / tilesize)) && !hitSomething; y++)
   {
-    for(unsigned int x = _x / tilesize; (x <= ((_x + _width -1) / tilesize)) && !hitSomething; x++)
+    for(unsigned int x = this->x() / tilesize; (x <= ((this->x() + width() -1) / tilesize)) && !hitSomething; x++)
     {
       hitSomething |= _tilemap->at(x, y) != 0;
       if(hitSomething)
       {
-        _y = y * tilesize - _height;
+        this->y(y * tilesize - height());
       }
     }
   }
@@ -211,13 +209,13 @@ void Player::_moveDown()
 bool Player::_isTouchingBottomTile()
 {
   const unsigned int tilesize = _tilemap->tilesize();
-  unsigned int y = (_y + _height + 1) / tilesize;
+  unsigned int y = (this->y() + height() + 1) / tilesize;
   bool isTouching = false;
   
   //If we are on the bottomest line of the tilemap, we consider that we are touching a tile.
-  isTouching = _y >= (_tilemap->height() - 1) * tilesize;
+  isTouching = this->y() >= (_tilemap->height() - 1) * tilesize;
 
-  for(unsigned int x = _x / tilesize; (x <= ((_x + _width - 1) / tilesize)) && !isTouching; x++)
+  for(unsigned int x = this->x() / tilesize; (x <= ((this->x() + width() - 1) / tilesize)) && !isTouching; x++)
   {
     isTouching |= _tilemap->at(x, y) != 0;
   }
@@ -228,13 +226,13 @@ bool Player::_isTouchingBottomTile()
 bool Player::_isTouchingTopTile()
 {
   const unsigned int tilesize = _tilemap->tilesize();
-  unsigned int y = (_y - 1) / tilesize;
+  unsigned int y = (this->y() - 1) / tilesize;
   bool isTouching = false;
   
   //If we are on the toppest position of the tilemap, we consider that we are touching a tile.
-  isTouching = _y == 0;
+  isTouching = this->y() == 0;
 
-  for(unsigned int x = _x / tilesize; (x <= ((_x + _width - 1) / tilesize)) && !isTouching; x++)
+  for(unsigned int x = this->x() / tilesize; (x <= ((this->x() + width() - 1) / tilesize)) && !isTouching; x++)
   {
     isTouching |= _tilemap->at(x, y) != 0;
   }
@@ -246,12 +244,12 @@ bool Player::_isTouchingLeftTile()
 {
   return false;
   const unsigned int tilesize = _tilemap->tilesize();
-  unsigned int x = (_x + _width + 1) / tilesize;
+  unsigned int x = (this->x() + width() + 1) / tilesize;
   bool isTouching = false;
   
-  isTouching = _x == 0;
+  isTouching = this->x() == 0;
 
-  for(unsigned int y = _y / tilesize; (y <= ((_y + _height - 1) / tilesize)) && !isTouching; y++)
+  for(unsigned int y = this->y() / tilesize; (y <= ((this->y() + height() - 1) / tilesize)) && !isTouching; y++)
   {
     isTouching |= _tilemap->at(x, y) != 0;
   }
@@ -263,12 +261,12 @@ bool Player::_isTouchingRightTile()
 {
   return false;
   const unsigned int tilesize = _tilemap->tilesize();
-  unsigned int x = (_x + _width + 1) / tilesize;
+  unsigned int x = (this->x() + width() + 1) / tilesize;
   bool isTouching = false;
 
-  isTouching = _x >= (_tilemap->width() - 1) * tilesize;
+  isTouching = this->x() >= (_tilemap->width() - 1) * tilesize;
 
-  for(unsigned int y = _y / tilesize; (y <= ((_y + _height - 1) / tilesize)) && !isTouching; y++)
+  for(unsigned int y = this->y() / tilesize; (y <= ((this->y() + height() - 1) / tilesize)) && !isTouching; y++)
   {
     isTouching |= _tilemap->at(x, y) != 0;
   }

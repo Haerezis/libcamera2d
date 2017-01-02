@@ -27,43 +27,6 @@ class Camera : public Object2D
    * Destructor.
    */
   virtual ~Camera();
-
-  /**
-   * Get the height (in pixels) of the world in which the camera is moving.
-   * \return The height (in pixels) of the world in which the camera is moving.
-   */
-  unsigned int worldHeight() const;
-
-  /**
-   * Set the height (in pixels) of the world in which the camera is moving.
-   * \param[in] The height (in pixels) of the world in which the camera is moving.
-   */
-  void worldHeight(unsigned int height);
-
-  /**
-   * Get the width (in pixels) of the world in which the camera is moving.
-   * \return The width (in pixels) of the world in which the camera is moving.
-   */
-  unsigned int worldWidth() const;
-
-  /**
-   * Set the width (in pixels) of the world in which the camera is moving.
-   * \param[in] The width (in pixels) of the world in which the camera is moving.
-   */
-  void worldWidth(unsigned int width);
-
- protected:
-  /**
-   * The width (in pixels) of the world in which the camera is moving.
-   * If 0, the world doesn't have any X axis bound.
-   */
-  unsigned int _worldWidth;
-
-  /**
-   * The height (in pixels) of the world in which the camera is moving.
-   * If 0, the world doesn't have any Y axis bound.
-   */
-  unsigned int _worldHeight;
 };
 }
 

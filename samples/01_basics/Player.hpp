@@ -11,22 +11,11 @@ class Player : public libcamera2d::Object2D
 
   ~Player();
 
-  unsigned int worldWidth() const;
-
-  void worldWidth(unsigned int value);
-
-  unsigned int worldHeight() const;
-
-  void worldHeight(unsigned int value);
-
   void moveHorizontal(float value);
 
   void moveVertical(float value);
 
  protected:
-  unsigned int _worldWidth;
-  unsigned int _worldHeight;
-
   static const unsigned int _horizontalMoveIncrement = 4;
   static const unsigned int _verticalMoveIncrement = 4;
 };

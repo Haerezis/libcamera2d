@@ -14,17 +14,17 @@ Camera_positionLocking::~Camera_positionLocking() {}
 void Camera_positionLocking::update(unsigned int targetX, unsigned int targetY)
 {
   if (targetX < _offsetX)
-    _x = 0;
-  else if (((targetX - _offsetX) + _width) > _worldWidth)
-    _x = _worldWidth - _width;
+    x(0);
+  else if (((targetX - _offsetX) + width()) > worldWidth())
+    x(worldWidth() - width());
   else
-    _x = targetX - _offsetX;
+    x(targetX - _offsetX);
 
   if (targetY < _offsetY)
-    _y = 0;
-  else if (((targetY - _offsetY) + _height) > _worldHeight)
-    _y = _worldHeight - _height;
+    y(0);
+  else if (((targetY - _offsetY) + height()) > worldHeight())
+    y(worldHeight() - height());
   else
-    _y = targetY - _offsetY;
+    y(targetY - _offsetY);
 }
 }

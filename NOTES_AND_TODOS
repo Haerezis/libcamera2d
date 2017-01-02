@@ -1,1 +1,18 @@
 https://docs.google.com/document/d/1iNSQIyNpVGHeak6isbP6AHdHD50gs8MNXF1GCf08efg/pub
+
+Techniques to implement :
+-single focus position lock. offset -> position
+-dual focus position lock. offets -> position, direction
+-windows lock. bounds positions -> position
+-auto-scroll. start-end position, time -> time delta
+
+Transformation:
+-snapping. null -> boolean
+-manual panning. null -> int
+-push scrolling (mario style : can't go back). null -> null
+
+Smoothing:
+-lerp / EaseOut. null -> coeff, time
+-speedup pullup zone
+-lerp + camera velocity memory (camera physics) / EaseInOut
+-focus (attractor). list of attractors infos -> list of attractors infos
