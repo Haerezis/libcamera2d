@@ -96,6 +96,12 @@ class Object2D
    */
   void worldWidth(unsigned int width);
 
+  const ObjectDimension& horizontalDimension() const;
+  void horizontalDimension(const ObjectDimension& value);
+  
+  const ObjectDimension& verticalDimension() const;
+  void verticalDimension(const ObjectDimension& value);
+
  protected:
   ObjectDimension _horizontalDimension;
   

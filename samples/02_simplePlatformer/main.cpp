@@ -6,7 +6,8 @@
 #include <SDL.h>
 
 #include "Player.hpp"
-#include "libcamera2d/Camera_positionLocking.hpp"
+#include "libcamera2d/Camera.hpp"
+#include "libcamera2d/PositionLocking.hpp"
 #include "tilemap_data.hpp"
 #include "SdlException.hpp"
 #include "Tilemap.hpp"
@@ -34,7 +35,9 @@ class DemoSDL
 
   Player _player;
 
-  std::unique_ptr<libcamera2d::Camera_positionLocking> _camera;
+  std::unique_ptr<libcamera2d::PositionLocking> _horizontalPositionLocking;
+  std::unique_ptr<libcamera2d::PositionLocking> _verticalPositionLocking;
+  std::unique_ptr<libcamera2d::Camera> _camera;
 
   SDL_Window* _window;
   SDL_Renderer* _renderer;
@@ -72,9 +75,11 @@ DemoSDL::DemoSDL(unsigned int windowWidth, unsigned int windowHeight, unsigned i
     }
   }
 
-  _camera.reset(new libcamera2d::Camera_positionLocking(
-      (_windowWidth - _player.width()) / 2, (_windowHeight - _player.height()) / 2, _windowWidth,
-      _windowHeight, _tileMap.width() * _tileMap.tilesize(), _tileMap.height() * _tileMap.tilesize()));
+  _camera.reset(new libcamera2d::Camera(
+        _windowWidth, _windowHeight,
+        _tileMap.width() * _tileMap.tilesize(), _tileMap.height() * _tileMap.tilesize()));
+  _horizontalPositionLocking.reset(new libcamera2d::PositionLocking(_camera->horizontalDimension()));
+  _verticalPositionLocking.reset(new libcamera2d::PositionLocking(_camera->verticalDimension()));
 
   updateCamera();
 }
@@ -178,7 +183,16 @@ void DemoSDL::handleKeyboardState()
 void DemoSDL::updateCamera()
 {
   _player.updatePosition();
-  _camera->update(_player.x(), _player.y());
+  
+  libcamera2d::ObjectDimension vertical =  _player.verticalDimension();
+  libcamera2d::ObjectDimension horizontal = _player.horizontalDimension();
+
+  //TODO make it more pretty
+  vertical = (*_verticalPositionLocking)(vertical);
+  horizontal = (*_horizontalPositionLocking)(horizontal);
+
+  _camera->verticalDimension(vertical);
+  _camera->horizontalDimension(horizontal);
 }
 
 int main()

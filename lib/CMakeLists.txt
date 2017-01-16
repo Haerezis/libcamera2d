@@ -7,6 +7,9 @@ set(
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/libcamera2d.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Object2D.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/ObjectDimension.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/ObjectDimensionGenerator.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/PositionLocking.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/libcamera2d/Offset.hpp
 )
 
 set(
@@ -16,6 +19,9 @@ set(
   ${CMAKE_CURRENT_SOURCE_DIR}/src/libcamera2d.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/Object2D.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/ObjectDimension.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ObjectDimensionGenerator.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/PositionLocking.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/Offset.cpp
 )
 
 add_library(${CMAKE_PROJECT_NAME} ${HEADERS} ${SOURCES})

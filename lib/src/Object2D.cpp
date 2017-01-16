@@ -33,4 +33,25 @@ void Object2D::worldHeight(unsigned int height) { _verticalDimension.bound(heigh
 unsigned int Object2D::worldWidth() const { return _horizontalDimension.bound(); }
 
 void Object2D::worldWidth(unsigned int width) { _horizontalDimension.bound(width); }
+
+const ObjectDimension& Object2D::horizontalDimension() const
+{
+  return _horizontalDimension;
+}
+
+void Object2D::horizontalDimension(const ObjectDimension& value)
+{
+  _horizontalDimension = value;
+}
+
+const ObjectDimension& Object2D::verticalDimension() const
+{
+  return _verticalDimension;
+}
+
+void Object2D::verticalDimension(const ObjectDimension& value)
+{
+  _verticalDimension = value;
+}
+
 }
