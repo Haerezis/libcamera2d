@@ -2,8 +2,9 @@
 
 namespace libcamera2d
 {
-Object2D::Object2D(unsigned int width, unsigned int height, unsigned int worldWidth,
-         unsigned int worldHeight) :
+Object2D::Object2D(
+    unsigned int width, unsigned int height,
+    unsigned int worldWidth, unsigned int worldHeight) :
   _horizontalDimension(width, worldWidth), _verticalDimension(height, worldHeight)
 {
 }
@@ -34,22 +35,22 @@ unsigned int Object2D::worldWidth() const { return _horizontalDimension.bound();
 
 void Object2D::worldWidth(unsigned int width) { _horizontalDimension.bound(width); }
 
-const ObjectDimension& Object2D::horizontalDimension() const
+const Object1D& Object2D::horizontalDimension() const
 {
   return _horizontalDimension;
 }
 
-void Object2D::horizontalDimension(const ObjectDimension& value)
+void Object2D::horizontalDimension(const Object1D& value)
 {
   _horizontalDimension = value;
 }
 
-const ObjectDimension& Object2D::verticalDimension() const
+const Object1D& Object2D::verticalDimension() const
 {
   return _verticalDimension;
 }
 
-void Object2D::verticalDimension(const ObjectDimension& value)
+void Object2D::verticalDimension(const Object1D& value)
 {
   _verticalDimension = value;
 }

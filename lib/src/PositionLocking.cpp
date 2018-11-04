@@ -3,8 +3,8 @@
 
 namespace libcamera2d
 {
-  PositionLocking::PositionLocking(const ObjectDimension& base) :
-    ObjectDimensionGenerator(base)
+  PositionLocking::PositionLocking(const Object1D& base) :
+    _base(base)
   {
   }
 
@@ -12,9 +12,9 @@ namespace libcamera2d
   {
   }
 
-  ObjectDimension PositionLocking::operator()(const ObjectDimension& target) const
+  Object1D PositionLocking::operator()(const Object1D& target) const
   {
-    ObjectDimension retval = _base;
+    Object1D retval = _base;
     
     unsigned int offset = (_base.size() - target.size()) / 2;
 

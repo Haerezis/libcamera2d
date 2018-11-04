@@ -1,7 +1,7 @@
 #ifndef _LIBCAMERA2D_OBJECT2D_HPP
 #define _LIBCAMERA2D_OBJECT2D_HPP
 
-#include "libcamera2d/ObjectDimension.hpp"
+#include "libcamera2d/Object1D.hpp"
 
 namespace libcamera2d
 {
@@ -96,16 +96,16 @@ class Object2D
    */
   void worldWidth(unsigned int width);
 
-  const ObjectDimension& horizontalDimension() const;
-  void horizontalDimension(const ObjectDimension& value);
+  const Object1D& horizontalDimension() const;
+  void horizontalDimension(const Object1D& value);
   
-  const ObjectDimension& verticalDimension() const;
-  void verticalDimension(const ObjectDimension& value);
+  const Object1D& verticalDimension() const;
+  void verticalDimension(const Object1D& value);
 
  protected:
-  ObjectDimension _horizontalDimension;
+  Object1D _horizontalDimension;
   
-  ObjectDimension _verticalDimension;
+  Object1D _verticalDimension;
 
 };
 }

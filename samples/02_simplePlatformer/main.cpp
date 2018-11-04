@@ -184,8 +184,8 @@ void DemoSDL::updateCamera()
 {
   _player.updatePosition();
   
-  libcamera2d::ObjectDimension vertical =  _player.verticalDimension();
-  libcamera2d::ObjectDimension horizontal = _player.horizontalDimension();
+  libcamera2d::Object1D vertical =  _player.verticalDimension();
+  libcamera2d::Object1D horizontal = _player.horizontalDimension();
 
   //TODO make it more pretty
   vertical = (*_verticalPositionLocking)(vertical);

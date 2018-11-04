@@ -13,9 +13,10 @@ namespace libcamera2d
 class Camera_positionLocking : public Camera
 {
  public:
-  Camera_positionLocking(unsigned int offsetX, unsigned int offsetY, unsigned int width,
-                                unsigned int height, unsigned int worldWidth,
-                                unsigned int worldHeight);
+  Camera_positionLocking(
+      unsigned int offsetX, unsigned int offsetY,
+      unsigned int width, unsigned int height,
+      unsigned int worldWidth, unsigned int worldHeight);
 
   /**
    * Destructor.

@@ -180,8 +180,8 @@ void DemoSDL::handleKeyboardState()
 void DemoSDL::updateCamera()
 {
   //_camera->update(_player.x(), _player.y());
-  libcamera2d::ObjectDimension vertical =  _player.verticalDimension();
-  libcamera2d::ObjectDimension horizontal = _player.horizontalDimension();
+  libcamera2d::Object1D vertical =  _player.verticalDimension();
+  libcamera2d::Object1D horizontal = _player.horizontalDimension();
 
   vertical = (*_verticalPositionLocking)(vertical);
   horizontal = (*_horizontalPositionLocking)(horizontal);

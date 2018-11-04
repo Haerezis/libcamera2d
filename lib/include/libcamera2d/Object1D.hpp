@@ -1,5 +1,5 @@
-#ifndef _LIBCAMERA2D_OBJECT_DIMENSION_HPP
-#define _LIBCAMERA2D_OBJECT_DIMENSION_HPP
+#ifndef _LIBCAMERA2D_OBJECT_1D_HPP
+#define _LIBCAMERA2D_OBJECT_1D_HPP
 
 
 namespace libcamera2d
@@ -9,7 +9,7 @@ namespace libcamera2d
  * in a specific dimension.
  * In clear, this object represent of the 1D infos of a dimentional object.
  */
-class ObjectDimension
+class Object1D
 {
   public:
   /**
@@ -17,12 +17,12 @@ class ObjectDimension
    * \param[in] size the size of the object in the dimension represented by this object.
    * \param[in] bound the bound for the position of the object in the dimension represented by this object.
    */
-  ObjectDimension(unsigned int size, unsigned int bound);
+  Object1D(unsigned int size, unsigned int bound);
 
   /**
    * Destructor.
    */
-  virtual ~ObjectDimension();
+  virtual ~Object1D();
   
   /**
    * Get the position (in pixel) of the object's origin in this dimension.
